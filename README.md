@@ -3,7 +3,7 @@ tap-target-compose is a Jetpack Compose implementation of the [Material Design t
 
 This library was inspired by its View counterpart, [TapTargetView](https://github.com/KeepSafe/TapTargetView).
 
-<img src="/.github/tap-target-image.gif" width="280" height="498" alt="screenshot"/>
+<img src="/.github/tap-target-image.gif" width="280" alt="screenshot"/>
 
 # Sample app
 This library comes with a sample app that shows examples of how to use it.
