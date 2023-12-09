@@ -1,18 +1,18 @@
 plugins {
-  id("com.android.application")
-  id("org.jetbrains.kotlin.android")
+  alias(libs.plugins.android.application)
+  alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
   namespace = "com.psoffritti.taptargetcompose"
-  compileSdk = 34
+  compileSdk = libs.versions.compileSdk.get().toInt()
 
   defaultConfig {
     applicationId = "com.psoffritti.taptargetcompose"
-    minSdk = 21
-    targetSdk = 34
-    versionCode = 1
-    versionName = "1.0"
+    minSdk = libs.versions.minSdk.get().toInt()
+    targetSdk = libs.versions.compileSdk.get().toInt()
+    versionCode = libs.versions.sampleApp.versionCode.get().toInt()
+    versionName = libs.versions.sampleApp.versionName.get()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -34,24 +34,24 @@ android {
     compose = true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion = "1.5.4"
+    kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
   }
 }
 
 dependencies {
   implementation(project(":tap-target-compose"))
 
-  implementation("androidx.core:core-ktx:1.12.0")
-  implementation("androidx.appcompat:appcompat:1.6.1")
-  implementation("com.google.android.material:material:1.10.0")
+  implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.material)
 
-  val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
+  val composeBom = platform(libs.androidx.compose.bom)
   implementation(composeBom)
   androidTestImplementation(composeBom)
-  implementation("androidx.activity:activity-compose:1.8.1")
-  implementation("androidx.compose.material3:material3")
-  implementation("androidx.compose.material:material-icons-extended")
+  implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.material.icons)
+  implementation(libs.androidx.activity.compose)
 
-  implementation("androidx.compose.ui:ui-tooling-preview")
-  implementation("androidx.compose.ui:ui-tooling")
+  implementation(libs.androidx.compose.ui.tooling.preview)
+  implementation(libs.androidx.compose.ui.tooling)
 }
