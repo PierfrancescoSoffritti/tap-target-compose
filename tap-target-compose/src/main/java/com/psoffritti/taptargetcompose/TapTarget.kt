@@ -35,7 +35,7 @@ fun TapTargetScaffold(
   showTapTargets: Boolean,
   modifier: Modifier = Modifier,
   onComplete: () -> Unit = { },
-  // TODO use rememberSavable
+  // TODO(issue#1) use rememberSavable
   state: TapTargetState = remember { TapTargetState() },
   content: @Composable TapTargetScope.() -> Unit,
 ) {
@@ -79,7 +79,7 @@ class TapTargetScope internal constructor(private val state: TapTargetState) {
     description: TextDefinition,
     precedence: Int,
     tapTargetStyle: TapTargetStyle = TapTargetStyle.Default,
-    // TODO can we avoid intercepting the click instead of defining a callback?
+    // TODO(issue#2) can we avoid intercepting the click instead of defining a callback?
     onTargetClick: () -> Unit = { },
     onTargetCancel: () -> Unit = { },
   ): Modifier {
