@@ -9,7 +9,7 @@ android {
 
   defaultConfig {
     applicationId = "com.psoffritti.taptargetcompose"
-    minSdk = libs.versions.minSdk.get().toInt()
+    minSdk = libs.versions.sampleApp.minSdk.get().toInt()
     targetSdk = libs.versions.compileSdk.get().toInt()
     versionCode = libs.versions.sampleApp.versionCode.get().toInt()
     versionName = libs.versions.sampleApp.versionName.get()
