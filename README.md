@@ -25,12 +25,6 @@ dependencies {
 }
 ```
 
-```kotlin
-dependencies {
-  implementation("com.pierfrancescosoffritti.taptargetcompose:core:0.0.1")
-}
-```
-
 # Quick start
 In order to start using the library you need to wrap your composables in a TapTargetScaffold
 
@@ -99,6 +93,8 @@ TapTargetScaffold(showTapTargets = true, onComplete = {}) {
   }
 }
 ```
+
+The library supports chaining of multiple tap targets, but you can also show only one if that's what you need.
 
 ---
 
