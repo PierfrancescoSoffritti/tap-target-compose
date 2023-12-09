@@ -13,6 +13,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "TapTargetCompose"
+rootProject.name = "tap-target-compose"
 include(":sample-app")
 include(":tap-target-compose")
