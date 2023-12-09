@@ -149,7 +149,6 @@ internal fun TapTargetContent(tapTarget: TapTarget, onComplete: () -> Unit) {
       tapTarget,
       outerCircleAnimatable,
       highlightCircleAnimatable,
-      tapTargetCircleAnimatable,
       textAlphaAnimatable
     )
   }
@@ -425,7 +424,6 @@ private fun AnimateOut(
   tapTarget: TapTarget,
   outerCircleAnimatable: Animatable<Float, AnimationVector1D>,
   highlightCircleAnimatable: Animatable<Float, AnimationVector1D>,
-  tapTargetCircleAnimatable: Animatable<Float, AnimationVector1D>,
   textAlphaAnimatable: Animatable<Float, AnimationVector1D>
 ) {
   // Outer circle

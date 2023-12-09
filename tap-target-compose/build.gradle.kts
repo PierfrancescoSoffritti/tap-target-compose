@@ -1,3 +1,5 @@
+import com.psoffritti.taptargetcompose.Configuration
+
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,10 +7,10 @@ plugins {
 
 android {
   namespace = "com.psoffritti.taptargetcompose"
-  compileSdk = libs.versions.compileSdk.get().toInt()
+  compileSdk = Configuration.compileSdk
 
   defaultConfig {
-    minSdk = libs.versions.minSdk.get().toInt()
+    minSdk = Configuration.minSdk
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")
@@ -38,3 +40,12 @@ dependencies {
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.ui.tooling)
 }
+
+extra.apply {
+  set("PUBLISH_GROUP_ID", "com.pierfrancescosoffritti.taptargetcompose")
+  set("PUBLISH_ARTIFACT_ID", "core")
+  set("PUBLISH_VERSION", Configuration.versionName)
+  set("PUBLISH_DESCRIPTION", "A compose implementation of Material Design tap targets, for feature discovery.")
+}
+
+apply(from = "../scripts/publish-module.gradle")

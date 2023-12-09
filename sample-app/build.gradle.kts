@@ -1,3 +1,5 @@
+import com.psoffritti.taptargetcompose.Configuration
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,14 +7,14 @@ plugins {
 
 android {
   namespace = "com.psoffritti.taptargetcompose"
-  compileSdk = libs.versions.compileSdk.get().toInt()
+  compileSdk = Configuration.compileSdk
 
   defaultConfig {
     applicationId = "com.psoffritti.taptargetcompose"
-    minSdk = libs.versions.sampleApp.minSdk.get().toInt()
-    targetSdk = libs.versions.compileSdk.get().toInt()
-    versionCode = libs.versions.sampleApp.versionCode.get().toInt()
-    versionName = libs.versions.sampleApp.versionName.get()
+    minSdk = Configuration.minSdkSampleApp
+    targetSdk = Configuration.targetSdk
+    versionCode = Configuration.versionCode
+    versionName = Configuration.versionName
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }

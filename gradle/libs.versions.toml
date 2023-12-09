@@ -1,10 +1,5 @@
 [versions]
-minSdk = "1"
-compileSdk = "34"
 compose-compiler = "1.5.4"
-sampleApp-versionCode = "1"
-sampleApp-versionName = "1.0.0"
-sampleApp-minSdk = "21"
 compose-bom = "2023.10.01"
 activity-compose = "1.8.1"
 core-ktx = "1.12.0"
@@ -14,6 +9,9 @@ material = "1.10.0"
 androidGradlePlugin = "8.2.0"
 androidLibrary = "8.2.0"
 kotlinAndroid = "1.9.20"
+
+gradleNexus = "1.3.0"
+dokka = "1.8.10"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
@@ -33,3 +31,5 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
+gradleNexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexus" }
+jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
