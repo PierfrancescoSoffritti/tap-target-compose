@@ -49,11 +49,11 @@ afterEvaluate {
                 pom {
                     name = PUBLISH_ARTIFACT_ID
                     description = PUBLISH_DESCRIPTION
-                    url = 'https://github.com/PierfrancescoSoffritti/TapTargetCompose/'
+                    url = 'https://github.com/PierfrancescoSoffritti/tap-target-compose/'
                     licenses {
                         license {
                             name = 'MIT License'
-                            url = 'https://github.com/PierfrancescoSoffritti/TapTargetCompose/blob/main/LICENSE'
+                            url = 'https://github.com/PierfrancescoSoffritti/tap-target-compose/blob/main/LICENSE'
                         }
                     }
                     developers {
@@ -64,9 +64,9 @@ afterEvaluate {
                         }
                     }
                     scm {
-                        connection = 'scm:git:github.com/PierfrancescoSoffritti/TapTargetCompose.git'
-                        developerConnection = 'scm:git:ssh://github.com/PierfrancescoSoffritti/TapTargetCompose.git'
-                        url = 'https://github.com/PierfrancescoSoffritti/TapTargetCompose.git'
+                        connection = 'scm:git:github.com/PierfrancescoSoffritti/tap-target-compose.git'
+                        developerConnection = 'scm:git:ssh://github.com/PierfrancescoSoffritti/tap-target-compose.git'
+                        url = 'https://github.com/PierfrancescoSoffritti/tap-target-compose.git'
                     }
                 }
             }
