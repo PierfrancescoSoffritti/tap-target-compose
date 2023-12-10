@@ -490,7 +490,7 @@ private fun Overlay(
 
   // We want the overlay to be always rendered above the entire content of the app.
   // To do this we need to access the decor view of the activity and add our overlay to it.
-  // Otherwise the tap target rendering would be limited to the size of the [TapTargetScaffold].
+  // Otherwise the tap target rendering would be limited to the size of the [TapTargetCoordinator].
   DisposableEffect(key) {
     val composeView = ComposeView(context).apply {
       setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)

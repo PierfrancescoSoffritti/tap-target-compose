@@ -21,22 +21,21 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 
 /**
- * A composable that can shows tap targets.
+ * A composable that can shows tap targets in succession.
  * @param showTapTargets Whether to show the tap targets or not.
  * @param modifier The modifier to apply to this layout.
  * @param onComplete Called when all tap targets have been shown.
- * @param state The state of [TapTargetScaffold],
+ * @param state The state of [TapTargetCoordinator],
  * can be used to know which tap target is being shown.
- * @param content The main content of the scaffold.
- * Each composable in the [content] can be marked as a tap target.
+ * @param content The main content. Each composable in the [content] can be marked as a tap target.
  */
 @Composable
-fun TapTargetScaffold(
+fun TapTargetCoordinator(
   showTapTargets: Boolean,
   modifier: Modifier = Modifier,
   onComplete: () -> Unit = { },
   // TODO(issue#1) use rememberSavable
-  state: TapTargetState = remember { TapTargetState() },
+  state: TapTargetCoordinatorState = remember { TapTargetCoordinatorState() },
   content: @Composable TapTargetScope.() -> Unit,
 ) {
   val scope = remember(state) { TapTargetScope(state) }
@@ -53,7 +52,7 @@ fun TapTargetScaffold(
 }
 
 @Composable
-private fun TapTarget(state: TapTargetState, onComplete: () -> Unit) {
+private fun TapTarget(state: TapTargetCoordinatorState, onComplete: () -> Unit) {
   val currentTarget = state.currentTarget ?: return
 
   TapTargetContent(currentTarget) {
@@ -65,7 +64,7 @@ private fun TapTarget(state: TapTargetState, onComplete: () -> Unit) {
 }
 
 /** The scope from which a tap target can be created, through [Modifier.tapTarget]. */
-class TapTargetScope internal constructor(private val state: TapTargetState) {
+class TapTargetScope internal constructor(private val state: TapTargetCoordinatorState) {
 
   /**
    * Modifier used to mark a [Composable] as a tap target.
@@ -123,7 +122,7 @@ data class TapTargetDefinition(
 )
 
 /** Keeps track of which tap target is currently being shown. */
-class TapTargetState internal constructor() {
+class TapTargetCoordinatorState internal constructor() {
   internal val tapTargets = mutableStateMapOf<Int, TapTarget>()
   internal var currentTargetIndex by mutableIntStateOf(0)
 

@@ -26,10 +26,10 @@ dependencies {
 ```
 
 # Quick start
-In order to start using the library you need to wrap your composables in a TapTargetScaffold
+In order to start using the library you need to wrap your composables in a TapTargetCoordinator
 
 ```kotlin
-TapTargetScaffold(showTapTargets = true, onComplete = {}) {
+TapTargetCoordinator(showTapTargets = true, onComplete = {}) {
   Surface {
     Button(
       onClick = { },
@@ -82,7 +82,7 @@ val tapTargetDefinition = TapTargetDefinition(
   ),
 )
 
-TapTargetScaffold(showTapTargets = true, onComplete = {}) {
+TapTargetCoordinator(showTapTargets = true, onComplete = {}) {
   Surface {
     Button(
       onClick = {  },

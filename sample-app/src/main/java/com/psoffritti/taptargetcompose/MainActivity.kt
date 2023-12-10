@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       AppTheme {
-        TapTargetScaffold(showTapTargets = true, onComplete = {}) {
+        TapTargetCoordinator(showTapTargets = true, onComplete = {}) {
           Surface(modifier = Modifier.fillMaxSize()) {
             Content()
           }
