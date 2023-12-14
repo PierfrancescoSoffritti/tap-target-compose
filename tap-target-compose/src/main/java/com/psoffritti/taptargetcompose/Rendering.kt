@@ -36,7 +36,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
@@ -493,7 +492,6 @@ private fun Overlay(
   // Otherwise the tap target rendering would be limited to the size of the [TapTargetCoordinator].
   DisposableEffect(key) {
     val composeView = ComposeView(context).apply {
-      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
       setContent { content() }
     }
     decor.addView(composeView, layoutParams)
