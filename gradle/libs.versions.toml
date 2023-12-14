@@ -8,7 +8,7 @@ material = "1.10.0"
 
 androidGradlePlugin = "8.2.0"
 androidLibrary = "8.2.0"
-kotlinAndroid = "1.9.20"
+kotlinAndroid = "1.9.21"
 
 gradleNexus = "1.3.0"
 dokka = "1.8.10"
