@@ -21,7 +21,7 @@ Add this to your module level `build.gradle` file to start using the library.
 
 ```gradle
 dependencies {
-  implementation "com.pierfrancescosoffritti.taptargetcompose:core:0.0.2"
+  implementation "com.pierfrancescosoffritti.taptargetcompose:core:1.0.0"
 }
 ```
 
