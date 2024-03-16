@@ -83,6 +83,10 @@ class TapTargetScope internal constructor(private val state: TapTargetCoordinato
     onTargetCancel: () -> Unit = { },
   ): Modifier {
     return onGloballyPositioned { layoutCoordinates ->
+      if (state.tapTargets.containsKey(precedence)) {
+        state.tapTargets[precedence]?.coordinates = layoutCoordinates
+      }
+
       state.tapTargets[precedence] = TapTarget(
         precedence = precedence,
         coordinates = layoutCoordinates,
@@ -143,7 +147,7 @@ data class TapTarget internal constructor(
   val precedence: Int,
   val title: TextDefinition,
   val description: TextDefinition,
-  val coordinates: LayoutCoordinates,
+  var coordinates: LayoutCoordinates,
   val style: TapTargetStyle = TapTargetStyle.Default,
   val onTargetClick: () -> Unit,
   val onTargetCancel: () -> Unit,

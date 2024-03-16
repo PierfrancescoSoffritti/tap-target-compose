@@ -83,7 +83,19 @@ internal fun TapTargetContent(tapTarget: TapTarget, onComplete: () -> Unit) {
     LocalConfiguration.current.screenHeightDp * density.density
   )
 
-  val targetRectPx = tapTarget.coordinates.boundsInWindow()
+  var lastTargetCenter by remember { mutableStateOf(Offset.Zero) }
+  // For moving targets, the coordinates can change, use a function
+  // to always get the latest.
+  val getTargetCenterPx = {
+    if (tapTarget.coordinates.isAttached) {
+      val center = tapTarget.coordinates.boundsInWindow().center
+      lastTargetCenter = center
+      center
+    }
+    else {
+      lastTargetCenter
+    }
+  }
 
   val targetMaxDimensionPx = max(
     tapTarget.coordinates.size.width,
@@ -170,7 +182,7 @@ internal fun TapTargetContent(tapTarget: TapTarget, onComplete: () -> Unit) {
   val textBlockTopLeft = getTextBlockOffset(
     Size(textWidthPx, textBlockHeightPx),
     screenSizePx,
-    targetRectPx.center,
+    getTargetCenterPx(),
     targetRadiusPx,
     textHorizontalMarginPx,
     textVerticalMarginPx
@@ -182,10 +194,10 @@ internal fun TapTargetContent(tapTarget: TapTarget, onComplete: () -> Unit) {
     textBlockTopLeft.y + textBlockHeightPx
   )
 
-  val topLeftRadius = textBlockRect.topLeft.distanceTo(targetRectPx.center)
-  val topRightRadius = textBlockRect.topRight.distanceTo(targetRectPx.center)
-  val bottomLeftRadius = textBlockRect.bottomLeft.distanceTo(targetRectPx.center)
-  val bottomRightRadius = textBlockRect.bottomRight.distanceTo(targetRectPx.center)
+  val topLeftRadius = textBlockRect.topLeft.distanceTo(getTargetCenterPx())
+  val topRightRadius = textBlockRect.topRight.distanceTo(getTargetCenterPx())
+  val bottomLeftRadius = textBlockRect.bottomLeft.distanceTo(getTargetCenterPx())
+  val bottomRightRadius = textBlockRect.bottomRight.distanceTo(getTargetCenterPx())
   val maxRadius = max(
     topLeftRadius,
     topRightRadius,
@@ -209,7 +221,7 @@ internal fun TapTargetContent(tapTarget: TapTarget, onComplete: () -> Unit) {
     outerCircleScale = outerCircleAnimatable.value,
     highlightCircleScale = highlightCircleAnimatable.value,
     tapTargetCircleScale = tapTargetCircleAnimatable.value,
-    targetCenter = targetRectPx.center,
+    getTargetCenter = getTargetCenterPx,
     targetRadius = targetRadiusPx,
     outerCircleRadius = outerCircleRadiusPx,
     highlightCircleRadius = highlightCircleRadiusPx,
@@ -230,7 +242,7 @@ private fun Render(
   outerCircleScale: Float,
   highlightCircleScale: Float,
   tapTargetCircleScale: Float,
-  targetCenter: Offset,
+  getTargetCenter: () -> Offset,
   targetRadius: Float,
   outerCircleRadius: Float,
   highlightCircleRadius: Float,
@@ -246,12 +258,12 @@ private fun Render(
         .pointerInput(tapTarget) {
           detectTapGestures { tapOffset ->
             when {
-              tapOffset.isOutsideCircle(targetCenter, outerCircleRadius) -> {
+              tapOffset.isOutsideCircle(getTargetCenter(), outerCircleRadius) -> {
                 // The user clicked outside the target
                 onTargetCancel()
               }
 
-              tapOffset.isInsideCircle(targetCenter, targetRadius) -> {
+              tapOffset.isInsideCircle(getTargetCenter(), targetRadius) -> {
                 // The user clicked the target
                 onTargetClick()
               }
@@ -268,7 +280,7 @@ private fun Render(
 
       // Draw outer circle
       drawCircle(
-        center = targetCenter,
+        center = getTargetCenter(),
         radius = outerCircleRadius * outerCircleScale,
         color = tapTarget.style.backgroundColor,
         alpha = tapTarget.style.backgroundAlpha
@@ -276,7 +288,7 @@ private fun Render(
 
       // Draw highlight circle
       drawCircle(
-        center = targetCenter,
+        center = getTargetCenter(),
         radius = highlightCircleRadius * highlightCircleScale,
         color = tapTarget.style.tapTargetHighlightColor,
         alpha = 1 - highlightCircleScale.pow(4)
@@ -284,7 +296,7 @@ private fun Render(
 
       // XOR circle used to reveal the tap target, since we are drawing the other circles above it.
       drawCircle(
-        center = targetCenter,
+        center = getTargetCenter(),
         radius = targetRadius + ((targetRadius / 10) * tapTargetCircleScale),
         color = tapTarget.style.tapTargetHighlightColor,
         blendMode = BlendMode.Xor
