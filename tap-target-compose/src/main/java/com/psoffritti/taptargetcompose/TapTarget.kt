@@ -168,7 +168,7 @@ data class TextDefinition(
       color = color,
       fontSize = fontSize,
       fontWeight = fontWeight,
-      textAlign = textAlign,
+      textAlign = textAlign ?: TextAlign.Unspecified,
       lineHeight = lineHeight,
       fontFamily = fontFamily,
       textDecoration = textDecoration,
