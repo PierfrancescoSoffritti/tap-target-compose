@@ -208,7 +208,7 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
   outerCircleRadiusPx = maxRadius + OUTER_CIRCLE_INTERNAL_MARGIN.toPx(density)
   highlightCircleRadiusPx = min(targetRadiusPx*2, outerCircleRadiusPx)
 
-  Render(
+  TapTargetRenderer(
     tapTarget,
     onTargetCancel = {
       targetCancelled = true
@@ -233,8 +233,9 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
   )
 }
 
+/** Component that draws the tap target. */
 @Composable
-private fun Render(
+private fun TapTargetRenderer(
   tapTarget: TapTarget,
   onTargetClick: () -> Unit,
   onTargetCancel: () -> Unit,
@@ -251,78 +252,76 @@ private fun Render(
   descriptionMeasure: TextLayoutResult,
   textBlockRect: Rect
 ) {
-  Overlay(key = tapTarget) {
-    Canvas(
-      modifier = Modifier
-        .fillMaxSize()
-        .pointerInput(tapTarget) {
-          detectTapGestures { tapOffset ->
-            when {
-              tapOffset.isOutsideCircle(getTargetCenter(), outerCircleRadius) -> {
-                // The user clicked outside the target
-                onTargetCancel()
-              }
+  Canvas(
+    modifier = Modifier
+      .fillMaxSize()
+      .pointerInput(tapTarget) {
+        detectTapGestures { tapOffset ->
+          when {
+            tapOffset.isOutsideCircle(getTargetCenter(), outerCircleRadius) -> {
+              // The user clicked outside the target
+              onTargetCancel()
+            }
 
-              tapOffset.isInsideCircle(getTargetCenter(), targetRadius) -> {
-                // The user clicked the target
-                onTargetClick()
-              }
+            tapOffset.isInsideCircle(getTargetCenter(), targetRadius) -> {
+              // The user clicked the target
+              onTargetClick()
             }
           }
-        } // Add transparency to the entire canvas, so we can show what's below the tap target area.
-        .graphicsLayer(alpha = 0.99f)
-    ) {
-      // Don't draw the circles if they are smaller than the targetRadius.
-      // Otherwise we would draw above the tap target during animation.
-      if (outerCircleRadius * outerCircleScale < targetRadius) {
-        return@Canvas
-      }
+        }
+      } // Add transparency to the entire canvas, so we can show what's below the tap target area.
+      .graphicsLayer(alpha = 0.99f)
+  ) {
+    // Don't draw the circles if they are smaller than the targetRadius.
+    // Otherwise we would draw above the tap target during animation.
+    if (outerCircleRadius * outerCircleScale < targetRadius) {
+      return@Canvas
+    }
 
-      // Draw outer circle
-      drawCircle(
-        center = getTargetCenter(),
-        radius = outerCircleRadius * outerCircleScale,
-        color = tapTarget.style.backgroundColor,
-        alpha = tapTarget.style.backgroundAlpha
-      )
+    // Draw outer circle
+    drawCircle(
+      center = getTargetCenter(),
+      radius = outerCircleRadius * outerCircleScale,
+      color = tapTarget.style.backgroundColor,
+      alpha = tapTarget.style.backgroundAlpha
+    )
 
-      // Draw highlight circle
-      drawCircle(
-        center = getTargetCenter(),
-        radius = highlightCircleRadius * highlightCircleScale,
-        color = tapTarget.style.tapTargetHighlightColor,
-        alpha = 1 - highlightCircleScale.pow(4)
-      )
+    // Draw highlight circle
+    drawCircle(
+      center = getTargetCenter(),
+      radius = highlightCircleRadius * highlightCircleScale,
+      color = tapTarget.style.tapTargetHighlightColor,
+      alpha = 1 - highlightCircleScale.pow(4)
+    )
 
-      // XOR circle used to reveal the tap target, since we are drawing the other circles above it.
-      drawCircle(
-        center = getTargetCenter(),
-        radius = targetRadius + ((targetRadius / 10) * tapTargetCircleScale),
-        color = tapTarget.style.tapTargetHighlightColor,
-        blendMode = BlendMode.Xor
-      )
+    // XOR circle used to reveal the tap target, since we are drawing the other circles above it.
+    drawCircle(
+      center = getTargetCenter(),
+      radius = targetRadius + ((targetRadius / 10) * tapTargetCircleScale),
+      color = tapTarget.style.tapTargetHighlightColor,
+      blendMode = BlendMode.Xor
+    )
 
-      drawText(
-        textLayoutResult = titleMeasure,
-        topLeft = textBlockTopLeft,
-        alpha = textAlpha.pow(2)
-      )
-      drawText(
-        textLayoutResult = descriptionMeasure,
-        topLeft = textBlockTopLeft.plus(
-          Offset(x = 0f, y = titleMeasure.size.height + TEXT_SPACING.toPx())
-        ),
-        alpha = textAlpha.pow(2)
-      )
+    drawText(
+      textLayoutResult = titleMeasure,
+      topLeft = textBlockTopLeft,
+      alpha = textAlpha.pow(2)
+    )
+    drawText(
+      textLayoutResult = descriptionMeasure,
+      topLeft = textBlockTopLeft.plus(
+        Offset(x = 0f, y = titleMeasure.size.height + TEXT_SPACING.toPx())
+      ),
+      alpha = textAlpha.pow(2)
+    )
 
-      if (DEBUG) {
-        // Draw the text block rect to see text bounds.
-        drawRect(
-          color = Color.Black.copy(alpha = 0.4f),
-          topLeft = textBlockRect.topLeft,
-          size = Size(textBlockRect.width, textBlockRect.height)
-        )
-      }
+    if (DEBUG) {
+      // Draw the text block rect to see text bounds.
+      drawRect(
+        color = Color.Black.copy(alpha = 0.4f),
+        topLeft = textBlockRect.topLeft,
+        size = Size(textBlockRect.width, textBlockRect.height)
+      )
     }
   }
 }
@@ -477,7 +476,7 @@ private fun AnimateOut(
  * @param content The content of the overlay.
  */
 @Composable
-private fun Overlay(
+internal fun Overlay(
   key: Any?,
   content: @Composable () -> Unit
 ) {

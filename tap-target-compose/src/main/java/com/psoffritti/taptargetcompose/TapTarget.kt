@@ -46,16 +46,20 @@ fun TapTargetCoordinator(
     if (showTapTargets) {
       val currentTapTarget = state.currentTarget
       if (currentTapTarget != null) {
-        TapTarget(
-          tapTarget = currentTapTarget,
-          onComplete = {
-            state.currentTargetIndex++
-            if (state.currentTargetIndex >= state.tapTargets.size) {
-              // There are no TapTargets left to render.
-              onComplete()
+        // Render the TapTarget in an overlay.
+        // By passing Unit as the key, the overlay will be removed once it leaves the composition.
+        Overlay(key = Unit) {
+          TapTarget(
+            tapTarget = currentTapTarget,
+            onComplete = {
+              state.currentTargetIndex++
+              if (state.currentTargetIndex >= state.tapTargets.size) {
+                // There are no TapTargets left to render.
+                onComplete()
+              }
             }
-          }
-        )
+          )
+        }
       }
     }
   }
