@@ -41,24 +41,22 @@ fun TapTargetCoordinator(
   val scope = remember(state) { TapTargetScope(state) }
 
   Box(modifier) {
+    // Always render the content.
     scope.content()
-    if (showTapTargets && state.tapTargets.isNotEmpty()) {
-      TapTarget(
-        state = state,
-        onComplete = onComplete,
-      )
-    }
-  }
-}
-
-@Composable
-private fun TapTarget(state: TapTargetCoordinatorState, onComplete: () -> Unit) {
-  val currentTarget = state.currentTarget ?: return
-
-  TapTargetContent(currentTarget) {
-    state.currentTargetIndex++
-    if (state.currentTarget == null) {
-      onComplete()
+    if (showTapTargets) {
+      val currentTapTarget = state.currentTarget
+      if (currentTapTarget != null) {
+        TapTarget(
+          tapTarget = currentTapTarget,
+          onComplete = {
+            state.currentTargetIndex++
+            if (state.currentTargetIndex >= state.tapTargets.size) {
+              // There are no TapTargets left to render.
+              onComplete()
+            }
+          }
+        )
+      }
     }
   }
 }
@@ -83,10 +81,6 @@ class TapTargetScope internal constructor(private val state: TapTargetCoordinato
     onTargetCancel: () -> Unit = { },
   ): Modifier {
     return onGloballyPositioned { layoutCoordinates ->
-      if (state.tapTargets.containsKey(precedence)) {
-        state.tapTargets[precedence]?.coordinates = layoutCoordinates
-      }
-
       state.tapTargets[precedence] = TapTarget(
         precedence = precedence,
         coordinates = layoutCoordinates,
@@ -147,7 +141,7 @@ data class TapTarget internal constructor(
   val precedence: Int,
   val title: TextDefinition,
   val description: TextDefinition,
-  var coordinates: LayoutCoordinates,
+  val coordinates: LayoutCoordinates,
   val style: TapTargetStyle = TapTargetStyle.Default,
   val onTargetClick: () -> Unit,
   val onTargetCancel: () -> Unit,

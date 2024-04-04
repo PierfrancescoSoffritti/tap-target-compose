@@ -76,7 +76,7 @@ private const val LOG_TAG = "TapTarget"
 
 /** Composable responsible for drawing the tap target. */
 @Composable
-internal fun TapTargetContent(tapTarget: TapTarget, onComplete: () -> Unit) {
+internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
   val density = LocalDensity.current
   val screenSizePx = Size(
     LocalConfiguration.current.screenWidthDp * density.density,
