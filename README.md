@@ -1,8 +1,10 @@
-#### Ad - this section is for advertisement
+#### \<Advertisement\>
 
 #### [:mega: Use AI to manage your app's reviews on Google Play :arrow_right:](https://playstorereply.com) 
 Increase your apps ratings. Engage with all users, no more unanswered reviews.
 Save time and increase customer satisfaction.
+
+#### \</Advertisement\>
 
 # tap-target-compose
 tap-target-compose is a Jetpack Compose implementation of the [Material Design tap targets](https://m1.material.io/growth-communications/feature-discovery.html#feature-discovery-design), used for feature discovery.
