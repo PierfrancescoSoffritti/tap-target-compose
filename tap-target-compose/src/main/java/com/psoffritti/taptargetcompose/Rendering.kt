@@ -221,6 +221,7 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
     outerCircleScale = outerCircleAnimatable.value,
     highlightCircleScale = highlightCircleAnimatable.value,
     tapTargetCircleScale = tapTargetCircleAnimatable.value,
+    textAlpha = textAlphaAnimatable.value,
     getTargetCenter = getTargetCenterPx,
     targetRadius = targetRadiusPx,
     outerCircleRadius = outerCircleRadiusPx,
@@ -228,8 +229,7 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
     textBlockTopLeft = textBlockTopLeft,
     titleMeasure = titleMeasure,
     descriptionMeasure = descriptionMeasure,
-    textBlockRect = textBlockRect,
-    textAlpha = textAlphaAnimatable.value
+    textBlockRect = textBlockRect
   )
 }
 
@@ -239,11 +239,11 @@ private fun TapTargetRenderer(
   tapTarget: TapTarget,
   onTargetClick: () -> Unit,
   onTargetCancel: () -> Unit,
-  textAlpha: Float,
+  getTargetCenter: () -> Offset,
   outerCircleScale: Float,
   highlightCircleScale: Float,
   tapTargetCircleScale: Float,
-  getTargetCenter: () -> Offset,
+  textAlpha: Float,
   targetRadius: Float,
   outerCircleRadius: Float,
   highlightCircleRadius: Float,
