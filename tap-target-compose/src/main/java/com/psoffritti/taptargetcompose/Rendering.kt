@@ -334,6 +334,8 @@ private fun TapTargetRenderer(
  * @param horizontalMargin The horizontal margin between the text block and the screen edge.
  * @param verticalMargin The vertical margin between the text block and the screen edge.
  */
+// TODO(issue#3) the entire screen size is used to position the text block,
+//  therefore it might overlap the status bar.
 private fun getTextBlockOffset(
   textBlockSize: Size,
   screenSize: Size,
