@@ -218,10 +218,10 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
       targetClicked = true
       animateIn = false
     },
-    outerCircleScale = outerCircleAnimatable.value,
-    highlightCircleScale = highlightCircleAnimatable.value,
-    tapTargetCircleScale = tapTargetCircleAnimatable.value,
-    textAlpha = textAlphaAnimatable.value,
+    outerCircleScaleProvider = { outerCircleAnimatable.value },
+    highlightCircleScaleProvider = { highlightCircleAnimatable.value },
+    tapTargetCircleScaleProvider = { tapTargetCircleAnimatable.value },
+    textAlphaProvider = { textAlphaAnimatable.value },
     getTargetCenter = getTargetCenterPx,
     targetRadius = targetRadiusPx,
     outerCircleRadius = outerCircleRadiusPx,
@@ -240,10 +240,10 @@ private fun TapTargetRenderer(
   onTargetClick: () -> Unit,
   onTargetCancel: () -> Unit,
   getTargetCenter: () -> Offset,
-  outerCircleScale: Float,
-  highlightCircleScale: Float,
-  tapTargetCircleScale: Float,
-  textAlpha: Float,
+  outerCircleScaleProvider: () -> Float,
+  highlightCircleScaleProvider: () -> Float,
+  tapTargetCircleScaleProvider: () -> Float,
+  textAlphaProvider: () -> Float,
   targetRadius: Float,
   outerCircleRadius: Float,
   highlightCircleRadius: Float,
@@ -274,14 +274,14 @@ private fun TapTargetRenderer(
   ) {
     // Don't draw the circles if they are smaller than the targetRadius.
     // Otherwise we would draw above the tap target during animation.
-    if (outerCircleRadius * outerCircleScale < targetRadius) {
+    if (outerCircleRadius * outerCircleScaleProvider() < targetRadius) {
       return@Canvas
     }
 
     // Draw outer circle
     drawCircle(
       center = getTargetCenter(),
-      radius = outerCircleRadius * outerCircleScale,
+      radius = outerCircleRadius * outerCircleScaleProvider(),
       color = tapTarget.style.backgroundColor,
       alpha = tapTarget.style.backgroundAlpha
     )
@@ -289,15 +289,15 @@ private fun TapTargetRenderer(
     // Draw highlight circle
     drawCircle(
       center = getTargetCenter(),
-      radius = highlightCircleRadius * highlightCircleScale,
+      radius = highlightCircleRadius * highlightCircleScaleProvider(),
       color = tapTarget.style.tapTargetHighlightColor,
-      alpha = 1 - highlightCircleScale.pow(4)
+      alpha = 1 - highlightCircleScaleProvider().pow(4)
     )
 
     // XOR circle used to reveal the tap target, since we are drawing the other circles above it.
     drawCircle(
       center = getTargetCenter(),
-      radius = targetRadius + ((targetRadius / 10) * tapTargetCircleScale),
+      radius = targetRadius + ((targetRadius / 10) * tapTargetCircleScaleProvider()),
       color = tapTarget.style.tapTargetHighlightColor,
       blendMode = BlendMode.Xor
     )
@@ -305,14 +305,14 @@ private fun TapTargetRenderer(
     drawText(
       textLayoutResult = titleMeasure,
       topLeft = textBlockTopLeft,
-      alpha = textAlpha.pow(2)
+      alpha = textAlphaProvider().pow(2)
     )
     drawText(
       textLayoutResult = descriptionMeasure,
       topLeft = textBlockTopLeft.plus(
         Offset(x = 0f, y = titleMeasure.size.height + TEXT_SPACING.toPx())
       ),
-      alpha = textAlpha.pow(2)
+      alpha = textAlphaProvider().pow(2)
     )
 
     if (DEBUG) {
