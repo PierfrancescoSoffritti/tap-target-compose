@@ -53,45 +53,16 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TapTargetScope.Content() {
-  // Tap target definition can be done separately from modifier definition.
-  val toolbarTapTarget = TapTargetDefinition(
+  val toolbarTapTarget = getStandardTapTargetDefinition(
     precedence = 1,
-    title = TextDefinition(
-      text = "Toolbar tap target",
-      textStyle = MaterialTheme.typography.titleLarge,
-      fontWeight = FontWeight.Bold,
-      color = MaterialTheme.colorScheme.onSecondaryContainer
-    ),
-    description = TextDefinition(
-      text = "This is a toolbar, tap it!",
-      textStyle = MaterialTheme.typography.bodyMedium,
-      color = MaterialTheme.colorScheme.onSecondaryContainer
-    ),
-    tapTargetStyle = TapTargetStyle(
-      backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-      tapTargetHighlightColor = MaterialTheme.colorScheme.onSecondaryContainer,
-      backgroundAlpha = 1f,
-    ),
+    title = "Toolbar tap target",
+    description = "This is a toolbar, tap it!",
   )
 
-  val tab2TapTarget = TapTargetDefinition(
+  val tab2TapTarget = getStandardTapTargetDefinition(
     precedence = 2,
-    title = TextDefinition(
-      text = "Tab2 tap target",
-      textStyle = MaterialTheme.typography.titleLarge,
-      fontWeight = FontWeight.Bold,
-      color = MaterialTheme.colorScheme.onSecondaryContainer
-    ),
-    description = TextDefinition(
-      text = "A moving target",
-      textStyle = MaterialTheme.typography.bodyMedium,
-      color = MaterialTheme.colorScheme.onSecondaryContainer
-    ),
-    tapTargetStyle = TapTargetStyle(
-      backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-      tapTargetHighlightColor = MaterialTheme.colorScheme.onSecondaryContainer,
-      backgroundAlpha = 1f,
-    ),
+    title = "Tab2 tap target",
+    description = "A moving target",
   )
 
   Scaffold(
@@ -107,25 +78,12 @@ private fun TapTargetScope.Content() {
         onClick = {  },
         icon = { Icon(Icons.Filled.Add, contentDescription = null) },
         text = { Text(text = "Click here") },
-        // In-place tap target definition.
         modifier = Modifier.tapTarget(
-          precedence = 0,
-          title = TextDefinition(
-            text = "Button tap target",
-            textStyle = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-          ),
-          description = TextDefinition(
-            text = "This is a button, tap it!",
-            textStyle = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-          ),
-          tapTargetStyle = TapTargetStyle(
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            tapTargetHighlightColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            backgroundAlpha = 1f,
-          ),
+          getStandardTapTargetDefinition(
+            precedence = 0,
+            title = "Button tap target",
+            description = "This is a button, tap it!",
+          )
         ),
       )
     },
@@ -182,4 +140,35 @@ private fun TabbedControls(
       onTabSelected(Tab.entries[pagerState.settledPage])
     }
   }
+}
+
+@Composable
+private fun getStandardTapTargetDefinition(
+  precedence: Int,
+  title: String,
+  description: String,
+  onTargetCLick: () -> Unit = {},
+  onTargetCancel: () -> Unit = {},
+): TapTargetDefinition {
+  return TapTargetDefinition(
+    precedence = precedence,
+    title = TextDefinition(
+      text = title,
+      textStyle = MaterialTheme.typography.titleLarge,
+      fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.onSecondaryContainer
+    ),
+    description = TextDefinition(
+      text = description,
+      textStyle = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSecondaryContainer
+    ),
+    tapTargetStyle = TapTargetStyle(
+      backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+      tapTargetHighlightColor = MaterialTheme.colorScheme.onSecondaryContainer,
+      backgroundAlpha = 1f,
+    ),
+    onTargetClick = onTargetCLick,
+    onTargetCancel = onTargetCancel,
+  )
 }
