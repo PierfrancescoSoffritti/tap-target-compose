@@ -146,7 +146,7 @@ class TapTargetCoordinatorState internal constructor() {
  * @param onTargetClick Called when the target is clicked.
  * @param onTargetCancel Called when the target is cancelled, by clicking outside the target.
  */
-data class TapTarget internal constructor(
+class TapTarget internal constructor(
   val precedence: Int,
   val title: TextDefinition,
   val description: TextDefinition,
