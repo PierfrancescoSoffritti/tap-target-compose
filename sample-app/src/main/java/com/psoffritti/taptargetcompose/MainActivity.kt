@@ -89,11 +89,12 @@ private fun TapTargetScope.Content() {
     },
     floatingActionButtonPosition = FabPosition.End,
   ) { innerPadding ->
-    Text("Content", modifier = Modifier.padding(innerPadding))
-    TabbedControls(onTabSelected = {}) { tab ->
-      when (tab) {
-        Tab.TAB1 -> Text("Tab 1 content")
-        Tab.TAB2 -> Text("Tab 2 content", modifier = Modifier.tapTarget(tab2TapTarget))
+    Column(modifier = Modifier.padding(innerPadding)) {
+      TabbedControls(onTabSelected = {}) { tab ->
+        when (tab) {
+          Tab.TAB1 -> Text("Tab 1 content")
+          Tab.TAB2 -> Text("Tab 2 content", modifier = Modifier.tapTarget(tab2TapTarget))
+        }
       }
     }
   }
@@ -116,7 +117,7 @@ private fun TabbedControls(
   val tabTitles = Tab.entries.map {
     when (it) {
       Tab.TAB1 -> "Tab1"
-      Tab.TAB2 -> "Tan2"
+      Tab.TAB2 -> "Tab2"
     }
   }
 
