@@ -1,4 +1,5 @@
 import com.psoffritti.taptargetcompose.Configuration
+import org.gradle.kotlin.dsl.android
 
 plugins {
   alias(libs.plugins.android.application)
