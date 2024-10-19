@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -36,11 +37,15 @@ fun TapTargetCoordinator(
   onComplete: () -> Unit = { },
   // TODO(issue#1) use rememberSavable
   state: TapTargetCoordinatorState = remember { TapTargetCoordinatorState() },
+  contentAlignment: Alignment = Alignment.Center,
   content: @Composable TapTargetScope.() -> Unit,
 ) {
   val scope = remember(state) { TapTargetScope(state) }
 
-  Box(modifier) {
+  Box(
+    contentAlignment = contentAlignment,
+    modifier = modifier
+  ) {
     // Always render the content.
     scope.content()
     if (showTapTargets) {
