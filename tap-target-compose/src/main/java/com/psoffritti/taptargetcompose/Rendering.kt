@@ -114,10 +114,10 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
   // Whether the user clicked outside the target.
   var targetCancelled by remember { mutableStateOf(false) }
 
-  val outerCircleAnimatable = remember { Animatable(0f) }
-  val highlightCircleAnimatable = remember { Animatable(0f) }
-  val tapTargetCircleAnimatable = remember { Animatable(0f) }
-  val textAlphaAnimatable = remember { Animatable(0f) }
+  val outerCircleScaleAnimatable = remember { Animatable(0f) }
+  val highlightCircleScaleAnimatable = remember { Animatable(0f) }
+  val tapTargetCircleScaleAnimatable = remember { Animatable(0f) }
+  val textAlphaScaleAnimatable = remember { Animatable(0f) }
 
   if (targetClicked) {
     // The user tapped the target, notify the target.
@@ -129,9 +129,9 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
     // We have completed the current target, and are now animating out.
     !animateIn &&
     // The outer circle has finished collapsing.
-    outerCircleAnimatable.value == 0f &&
+    outerCircleScaleAnimatable.value == 0f &&
     // The highlight circle has finished collapsing.
-    highlightCircleAnimatable.value == 0f
+    highlightCircleScaleAnimatable.value == 0f
   ) {
     // Animate out is complete. We are now switching to the next target and should animate in.
     animateIn = true
@@ -148,19 +148,19 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
 
   if (animateIn) {
     AnimateIn(
-      tapTarget,
-      outerCircleAnimatable,
-      highlightCircleAnimatable,
-      tapTargetCircleAnimatable,
-      textAlphaAnimatable
+      key1 = tapTarget,
+      outerCircleAnimatable = outerCircleScaleAnimatable,
+      highlightCircleAnimatable = highlightCircleScaleAnimatable,
+      tapTargetCircleAnimatable = tapTargetCircleScaleAnimatable,
+      textAlphaAnimatable = textAlphaScaleAnimatable
     )
   }
   else {
     AnimateOut(
-      tapTarget,
-      outerCircleAnimatable,
-      highlightCircleAnimatable,
-      textAlphaAnimatable
+      key1 = tapTarget,
+      outerCircleAnimatable = outerCircleScaleAnimatable,
+      highlightCircleAnimatable = highlightCircleScaleAnimatable,
+      textAlphaAnimatable= textAlphaScaleAnimatable
     )
   }
 
@@ -218,10 +218,10 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
       targetClicked = true
       animateIn = false
     },
-    outerCircleScaleProvider = { outerCircleAnimatable.value },
-    highlightCircleScaleProvider = { highlightCircleAnimatable.value },
-    tapTargetCircleScaleProvider = { tapTargetCircleAnimatable.value },
-    textAlphaProvider = { textAlphaAnimatable.value },
+    outerCircleScaleProvider = { outerCircleScaleAnimatable.value },
+    highlightCircleScaleProvider = { highlightCircleScaleAnimatable.value },
+    tapTargetCircleScaleProvider = { tapTargetCircleScaleAnimatable.value },
+    textAlphaProvider = { textAlphaScaleAnimatable.value },
     getTargetCenter = getTargetCenterPx,
     targetRadius = targetRadiusPx,
     outerCircleRadius = outerCircleRadiusPx,
@@ -379,13 +379,13 @@ private fun getTextBlockOffset(
 
 @Composable
 private fun AnimateIn(
-  tapTarget: TapTarget,
+  key1: Any?,
   outerCircleAnimatable: Animatable<Float, AnimationVector1D>,
   highlightCircleAnimatable: Animatable<Float, AnimationVector1D>,
   tapTargetCircleAnimatable: Animatable<Float, AnimationVector1D>,
   textAlphaAnimatable: Animatable<Float, AnimationVector1D>
 ) {
-  LaunchedEffect(tapTarget) {
+  LaunchedEffect(key1) {
     // Outer circle
     launch {
       outerCircleAnimatable.animateTo(
@@ -435,12 +435,12 @@ private fun AnimateIn(
 
 @Composable
 private fun AnimateOut(
-  tapTarget: TapTarget,
+  key1: Any?,
   outerCircleAnimatable: Animatable<Float, AnimationVector1D>,
   highlightCircleAnimatable: Animatable<Float, AnimationVector1D>,
   textAlphaAnimatable: Animatable<Float, AnimationVector1D>
 ) {
-  LaunchedEffect(tapTarget) {
+  LaunchedEffect(key1) {
     // Outer circle
     launch {
       outerCircleAnimatable.animateTo(
