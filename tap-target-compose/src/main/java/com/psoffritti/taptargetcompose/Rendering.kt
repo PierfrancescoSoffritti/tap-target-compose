@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -385,49 +385,51 @@ private fun AnimateIn(
   tapTargetCircleAnimatable: Animatable<Float, AnimationVector1D>,
   textAlphaAnimatable: Animatable<Float, AnimationVector1D>
 ) {
-  // Outer circle
   LaunchedEffect(tapTarget) {
-    outerCircleAnimatable.animateTo(
-      targetValue = 1f,
-      animationSpec = tween(
-        durationMillis = 300,
-        easing = FastOutSlowInEasing,
-      ),
-    )
-  }
-
-  // Highlight circle
-  LaunchedEffect(tapTarget) {
-    highlightCircleAnimatable.animateTo(
-      targetValue = 1f,
-      animationSpec = infiniteRepeatable(
-        animation = tween(1000, easing = FastOutSlowInEasing),
-        repeatMode = RepeatMode.Restart,
+    // Outer circle
+    launch {
+      outerCircleAnimatable.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+          durationMillis = 300,
+          easing = FastOutSlowInEasing,
+        ),
       )
-    )
-  }
+    }
 
-  // Tap target circle
-  LaunchedEffect(tapTarget) {
-    tapTargetCircleAnimatable.animateTo(
-      targetValue = 1f,
-      animationSpec = infiniteRepeatable(
-        animation = tween(500, easing = FastOutLinearInEasing),
-        repeatMode = RepeatMode.Reverse,
+    // Highlight circle
+    launch {
+      highlightCircleAnimatable.animateTo(
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+          animation = tween(1000, easing = FastOutSlowInEasing),
+          repeatMode = RepeatMode.Restart,
+        )
       )
-    )
-  }
+    }
 
-  // Text alpha
-  LaunchedEffect(tapTarget) {
-    delay(200)
-    textAlphaAnimatable.animateTo(
-      targetValue = 1f,
-      animationSpec = tween(
-        durationMillis = 300,
-        easing = FastOutSlowInEasing,
-      ),
-    )
+    // Tap target circle
+    launch {
+      tapTargetCircleAnimatable.animateTo(
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+          animation = tween(500, easing = FastOutLinearInEasing),
+          repeatMode = RepeatMode.Reverse,
+        )
+      )
+    }
+
+    // Text alpha
+    launch {
+      textAlphaAnimatable.animateTo(
+        targetValue = 1f,
+        animationSpec = tween(
+          delayMillis = 200,
+          durationMillis = 300,
+          easing = FastOutSlowInEasing,
+        ),
+      )
+    }
   }
 }
 
@@ -438,37 +440,39 @@ private fun AnimateOut(
   highlightCircleAnimatable: Animatable<Float, AnimationVector1D>,
   textAlphaAnimatable: Animatable<Float, AnimationVector1D>
 ) {
-  // Outer circle
   LaunchedEffect(tapTarget) {
-    outerCircleAnimatable.animateTo(
-      targetValue = 0f,
-      animationSpec = tween(
-        durationMillis = 300,
-        easing = FastOutSlowInEasing,
-      ),
-    )
-  }
-
-  // Highlight circle
-  LaunchedEffect(tapTarget) {
-    highlightCircleAnimatable.animateTo(
-      targetValue = 0f,
-      animationSpec = tween(
-        durationMillis = 300,
-        easing = FastOutSlowInEasing,
+    // Outer circle
+    launch {
+      outerCircleAnimatable.animateTo(
+        targetValue = 0f,
+        animationSpec = tween(
+          durationMillis = 300,
+          easing = FastOutSlowInEasing,
+        ),
       )
-    )
-  }
+    }
 
-  // Text alpha
-  LaunchedEffect(tapTarget) {
-    textAlphaAnimatable.animateTo(
-      targetValue = 0f,
-      animationSpec = tween(
-        durationMillis = 300,
-        easing = FastOutSlowInEasing,
-      ),
-    )
+    // Highlight circle
+    launch {
+      highlightCircleAnimatable.animateTo(
+        targetValue = 0f,
+        animationSpec = tween(
+          durationMillis = 300,
+          easing = FastOutSlowInEasing,
+        )
+      )
+    }
+
+    // Text alpha
+    launch {
+      textAlphaAnimatable.animateTo(
+        targetValue = 0f,
+        animationSpec = tween(
+          durationMillis = 300,
+          easing = FastOutSlowInEasing,
+        ),
+      )
+    }
   }
 }
 
