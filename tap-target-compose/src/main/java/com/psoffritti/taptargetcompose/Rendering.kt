@@ -97,10 +97,9 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
     }
   }
 
-  val targetMaxDimensionPx = max(
-    tapTarget.coordinates.size.width,
-    tapTarget.coordinates.size.height
-  )
+  val targetMaxDimensionPx = remember(tapTarget) {
+    max(tapTarget.coordinates.size.width, tapTarget.coordinates.size.height)
+  }
   val targetRadiusPx = targetMaxDimensionPx / 2 + TARGET_PADDING.toPx(density)
 
   // The radius of the outer circle of the tap target.

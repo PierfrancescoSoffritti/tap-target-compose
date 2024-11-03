@@ -52,9 +52,8 @@ fun TapTargetCoordinator(
       val currentTapTarget = state.currentTarget
       if (currentTapTarget != null) {
         // Render the TapTarget in an overlay.
-        // By passing the currentTapTarget as the key, we ensure that the overlay is recomposed
-        // each time the target changes, for example if it's LayoutCoordinates change.
-        Overlay(key = currentTapTarget) {
+        // The overlay is removed when the composable leaves the composition.
+        Overlay(key = Unit) {
           TapTarget(
             tapTarget = currentTapTarget,
             onComplete = {
