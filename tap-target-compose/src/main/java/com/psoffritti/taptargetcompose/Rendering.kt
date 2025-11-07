@@ -29,6 +29,8 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
@@ -278,12 +280,45 @@ private fun TapTargetRenderer(
     }
 
     // Draw outer circle
-    drawCircle(
-      center = getTargetCenter(),
-      radius = outerCircleRadius * outerCircleScaleProvider(),
-      color = tapTarget.style.backgroundColor,
-      alpha = tapTarget.style.backgroundAlpha
-    )
+    val scaledRadius = outerCircleRadius * outerCircleScaleProvider()
+    val center = getTargetCenter()
+
+    if (tapTarget.style.backgroundImage != null) {
+      // Draw with background image
+      val circlePath = Path().apply {
+        addOval(
+          Rect(
+            center = center,
+            radius = scaledRadius
+          )
+        )
+      }
+      clipPath(circlePath) {
+        val imageSize = Size(scaledRadius * 2, scaledRadius * 2)
+        val topLeft = Offset(
+          center.x - scaledRadius,
+          center.y - scaledRadius
+        )
+        // Translate to position and draw the image
+        translate(left = topLeft.x, top = topLeft.y) {
+          with(tapTarget.style.backgroundImage) {
+            draw(
+              size = imageSize,
+              alpha = tapTarget.style.backgroundAlpha,
+              colorFilter = null
+            )
+          }
+        }
+      }
+    } else {
+      // Draw with solid color
+      drawCircle(
+        center = center,
+        radius = scaledRadius,
+        color = tapTarget.style.backgroundColor,
+        alpha = tapTarget.style.backgroundAlpha
+      )
+    }
 
     // Draw highlight circle
     drawCircle(

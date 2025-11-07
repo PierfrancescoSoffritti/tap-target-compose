@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
@@ -190,12 +191,15 @@ data class TextDefinition(
  * @param backgroundColor The background color of the main circle.
  * @param backgroundAlpha The alpha of the main circle.
  * @param tapTargetHighlightColor The color of the highlight circle.
+ * @param backgroundImage Optional image to use as the background instead of a solid color.
+ * When provided, this will be drawn instead of the backgroundColor.
  */
 data class TapTargetStyle(
   val backgroundColor: Color = Color.Blue,
   @FloatRange(from = 0.0, to = 1.0)
   val backgroundAlpha: Float = 1f,
   val tapTargetHighlightColor: Color = Color.White,
+  val backgroundImage: Painter? = null,
 ) {
   companion object {
     val Default = TapTargetStyle()
