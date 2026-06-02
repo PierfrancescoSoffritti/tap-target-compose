@@ -14,7 +14,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -167,6 +169,12 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
   val textHorizontalMarginPx = TEXT_HORIZONTAL_MARGIN.toPx(density)
   val textVerticalMarginPx = TEXT_VERTICAL_MARGIN.toPx(density)
 
+  // The overlay is drawn over the whole window, including the area behind the
+  // system bars. Read their insets so the text block can be kept clear of them.
+  val systemBars = WindowInsets.systemBars
+  val topInsetPx = systemBars.getTop(density).toFloat()
+  val bottomInsetPx = systemBars.getBottom(density).toFloat()
+
   val textWidthPx = min(screenSizePx.width, maxTextWidthPx) - textHorizontalMarginPx * 2
 
   val constraints = Constraints.fixedWidth(textWidthPx.toInt())
@@ -184,7 +192,9 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
     getTargetCenterPx(),
     targetRadiusPx,
     textHorizontalMarginPx,
-    textVerticalMarginPx
+    textVerticalMarginPx,
+    topInsetPx,
+    bottomInsetPx
   )
   val textBlockRect = Rect(
     textBlockTopLeft.x,
@@ -332,16 +342,18 @@ private fun TapTargetRenderer(
  * @param targetRadius The radius of the target.
  * @param horizontalMargin The horizontal margin between the text block and the screen edge.
  * @param verticalMargin The vertical margin between the text block and the screen edge.
+ * @param topInset The top system bar (e.g. status bar) inset. The text block is kept below it.
+ * @param bottomInset The bottom system bar (e.g. navigation bar) inset. The text block is kept above it.
  */
-// TODO(issue#3) the entire screen size is used to position the text block,
-//  therefore it might overlap the status bar.
 private fun getTextBlockOffset(
   textBlockSize: Size,
   screenSize: Size,
   targetCenter: Offset,
   targetRadius: Float,
   horizontalMargin: Float,
-  verticalMargin: Float
+  verticalMargin: Float,
+  topInset: Float,
+  bottomInset: Float
 ): Offset {
   // The X coordinate of the text block, if positioned to the left of the target.
   val xLeft = max(targetCenter.x - textBlockSize.width, horizontalMargin)
@@ -362,16 +374,23 @@ private fun getTextBlockOffset(
     xRight
   }
 
+  // The top edge of the safe area, below the top system bar.
+  val safeTop = topInset + verticalMargin
+  // The bottom edge of the safe area, above the bottom system bar.
+  val safeBottom = screenSize.height - bottomInset - verticalMargin
+
   // The Y coordinate of the text block, if positioned above the target.
   val yTop = targetCenter.y - targetRadius - textBlockSize.height - verticalMargin
   // The Y coordinate of the text block, if positioned below the target.
   val yBottom = targetCenter.y + targetRadius + verticalMargin
 
-  val yOffset = if (yTop > 0) {
-    yTop
-  } else {
-    yBottom
-  }
+  // Prefer placing the text above the target when there is room without
+  // overlapping the top system bar; otherwise place it below.
+  val preferredY = if (yTop >= safeTop) yTop else yBottom
+
+  // Keep the whole text block within the safe area, clear of both system bars.
+  val maxY = max(safeTop, safeBottom - textBlockSize.height)
+  val yOffset = preferredY.coerceIn(safeTop, maxY)
 
   return Offset(xOffset, yOffset)
 }

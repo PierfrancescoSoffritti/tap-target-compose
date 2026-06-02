@@ -7,8 +7,8 @@ object Configuration {
   const val minSdkSampleApp = 21
   private const val majorVersion = 1
   private const val minorVersion = 2
-  private const val patchVersion = 1
-  const val versionCode = 4
+  private const val patchVersion = 2
+  const val versionCode = 5
   const val versionName = "$majorVersion.$minorVersion.$patchVersion"
   const val snapshotVersionName = "$majorVersion.$minorVersion.${patchVersion + 1}-SNAPSHOT"
 }
