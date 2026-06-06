@@ -149,7 +149,7 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
 
   if (animateIn) {
     AnimateIn(
-      key1 = tapTarget,
+      key1 = tapTarget.precedence,
       outerCircleAnimatable = outerCircleScaleAnimatable,
       highlightCircleAnimatable = highlightCircleScaleAnimatable,
       tapTargetCircleAnimatable = tapTargetCircleScaleAnimatable,
@@ -158,7 +158,7 @@ internal fun TapTarget(tapTarget: TapTarget, onComplete: () -> Unit) {
   }
   else {
     AnimateOut(
-      key1 = tapTarget,
+      key1 = tapTarget.precedence,
       outerCircleAnimatable = outerCircleScaleAnimatable,
       highlightCircleAnimatable = highlightCircleScaleAnimatable,
       textAlphaAnimatable= textAlphaScaleAnimatable
@@ -264,7 +264,7 @@ private fun TapTargetRenderer(
   Canvas(
     modifier = Modifier
       .fillMaxSize()
-      .pointerInput(tapTarget) {
+      .pointerInput(tapTarget.precedence) {
         detectTapGestures { tapOffset ->
           when {
             tapOffset.isOutsideCircle(getTargetCenter(), outerCircleRadius) -> {
